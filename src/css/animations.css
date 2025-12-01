@@ -1,0 +1,114 @@
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Background scrolling - FASTER */
+@keyframes bg-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100px);
+    }
+}
+
+/* Player jump */
+@keyframes player-jump {
+    0% {
+        bottom: 20%;
+    }
+    50% {
+        bottom: 60%;
+    }
+    100% {
+        bottom: 20%;
+    }
+}
+
+#game-player.jumping {
+    animation: player-jump 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Entity movement (right to left) */
+@keyframes entity-move {
+    from {
+        right: -10%;
+    }
+    to {
+        right: 110%;
+    }
+}
+
+/* Projectile movement (left to right) */
+@keyframes projectile-move {
+    from {
+        left: 0;
+    }
+    to {
+        left: 110%;
+    }
+}
+
+/* Hit flash effect */
+@keyframes hit-flash {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+}
+
+/* Saved fade effect */
+@keyframes saved-fade {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.5);
+    }
+}
+
+/* Title pulse */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.title {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Fade in */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.screen--active .screen__content {
+    animation: fade-in 0.3s ease-out;
+}
+
+/* Blink effect for game over */
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+#end-title {
+    animation: blink 1s ease-in-out infinite;
+}

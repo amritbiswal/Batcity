@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - File Loading</title>
+</head>
+<body>
+    <h1>Testing File Structure</h1>
+    <div id="output"></div>
+
+    <!-- Load all JavaScript files -->
+    <script src="src/js/utils/constants.js"></script>
+    <script src="src/js/utils/helpers.js"></script>
+    <script src="src/js/components/Player.js"></script>
+    <script src="src/js/components/Obstacle.js"></script>
+    <script src="src/js/components/Enemy.js"></script>
+    <script src="src/js/components/Civilian.js"></script>
+    <script src="src/js/components/Projectile.js"></script>
+    <script src="src/js/managers/EntityManager.js"></script>
+    <script src="src/js/managers/CollisionManager.js"></script>
+    <script src="src/js/managers/ScoreManager.js"></script>
+    <script src="src/js/managers/InputManager.js"></script>
+    <script src="src/js/screens/ScreenManager.js"></script>
+    <script src="src/js/screens/UIManager.js"></script>
+    <script src="src/js/Game.js"></script>
+    
+    <script>
+        const output = document.getElementById('output');
+        const results = [];
+        
+        // Test if all classes exist
+        const tests = [
+            { name: 'CONSTANTS', exists: typeof CONSTANTS !== 'undefined' },
+            { name: 'Helpers', exists: typeof Helpers !== 'undefined' },
+            { name: 'Player', exists: typeof Player !== 'undefined' },
+            { name: 'Obstacle', exists: typeof Obstacle !== 'undefined' },
+            { name: 'Enemy', exists: typeof Enemy !== 'undefined' },
+            { name: 'Civilian', exists: typeof Civilian !== 'undefined' },
+            { name: 'Projectile', exists: typeof Projectile !== 'undefined' },
+            { name: 'EntityManager', exists: typeof EntityManager !== 'undefined' },
+            { name: 'CollisionManager', exists: typeof CollisionManager !== 'undefined' },
+            { name: 'ScoreManager', exists: typeof ScoreManager !== 'undefined' },
+            { name: 'InputManager', exists: typeof InputManager !== 'undefined' },
+            { name: 'ScreenManager', exists: typeof ScreenManager !== 'undefined' },
+            { name: 'UIManager', exists: typeof UIManager !== 'undefined' },
+            { name: 'Game', exists: typeof Game !== 'undefined' }
+        ];
+        
+        tests.forEach(test => {
+            const status = test.exists ? '✅' : '❌';
+            results.push(`${status} ${test.name}`);
+        });
+        
+        output.innerHTML = '<pre>' + results.join('\n') + '</pre>';
+        
+        console.log('All tests:', tests);
+    </script>
+</body>
+</html>
