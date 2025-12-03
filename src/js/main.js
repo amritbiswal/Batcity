@@ -1,34 +1,15 @@
-/**
- * MAIN ENTRY POINT
- * Initialize game when DOM is ready
- */
+import { GameManager } from './GameManager.js';
 
-// Global game instance
-let game = null;
+// Initialize game
+let game;
 
-// Wait for DOM to be ready
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🦇 Batcity Runner Loading...');
-    
-    try {
-        // Create game instance
-        game = new Game();
-        
-        // Make game accessible in console for debugging
-        window.game = game;
-        
-        console.log('🎮 Game ready! Click Start to play.');
-    } catch (error) {
-        console.error('❌ Failed to initialize game:', error);
-    }
-});
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    game = new GameManager();
+  });
+} else {
+  game = new GameManager();
+}
 
-// Cleanup on page unload
-window.addEventListener('beforeunload', () => {
-    if (game) {
-        game.isRunning = false;
-        if (game.animationFrameId) {
-            cancelAnimationFrame(game.animationFrameId);
-        }
-    }
-});
+// Expose game to window for debugging
+window.game = game;

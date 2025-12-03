@@ -2,33 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    <title>Batman Runner (Prototype)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦇</text></svg>"
     />
-    <title>🦇 Batcity Runner</title>
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="src/css/main.css" />
-    <link rel="stylesheet" href="src/css/screens.css" />
-    <link rel="stylesheet" href="src/css/components.css" />
-    <link rel="stylesheet" href="src/css/animations.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- START SCREEN -->
+    <!-- START VIEW -->
     <section id="start-screen" class="screen screen--active">
       <div class="screen__content">
-        <h1 class="title">🦇 BATCITY RUNNER 🦇</h1>
-        <p class="subtitle">A Chrome Dino-style runner in black & white</p>
+        <h1 class="title">Batman Runner</h1>
+        <p class="subtitle">
+          Minimal prototype inspired by the Chrome Dino game.
+        </p>
 
         <div class="panel">
-          <h2 class="panel__title">How to Play</h2>
+          <h2 class="panel__title">How to Play (Concept)</h2>
           <ul class="list">
-            <li>Jump over obstacles</li>
-            <li>Shoot enemies to destroy them</li>
-            <li>Touch civilians to save them</li>
-            <li>Don't crash into obstacles or enemies</li>
-            <li>Don't shoot civilians - instant game over!</li>
+            <li>Press spacebar to jump over simple obstacles.</li>
+            <li>Avoid hitting enemies join the lane.</li>
+            <li>When civilians appear — touch to save them.</li>
+            <li>Try to get the highest score possible!</li>
+            <li>If you hit an obstacle or enemy → Game Over.</li>
+            <li>If you <b>shoot a civilian</b> → Game Over.</li>
           </ul>
         </div>
 
@@ -37,91 +36,128 @@
           <div class="columns">
             <div>
               <h4>Desktop</h4>
-              <p><kbd>SPACE</kbd> or <kbd>↑</kbd> to jump</p>
-              <p><kbd>F</kbd> or <kbd>S</kbd> to shoot</p>
+              <p>Space / ↑ to jump (double jump enabled)</p>
+              <p>F to shoot</p>
+              <p>A / D or ← / → - move left/right (boss phase)</p>
             </div>
             <div>
               <h4>Mobile</h4>
-              <p>Use on-screen buttons below</p>
+              <p>On-screen Jump &amp; Shoot buttons</p>
             </div>
           </div>
         </div>
 
-        <button id="start-btn" class="btn btn--primary" type="button">
-          START GAME
+        <button id="btn-start" class="btn btn--primary" type="button">
+          Start Game
         </button>
       </div>
     </section>
 
-    <!-- GAME SCREEN -->
+    <!-- GAME VIEW -->
     <section id="game-screen" class="screen">
       <div class="screen__content screen__content--game">
         <header class="hud">
-          <div>Phase: <span id="phase-display">1</span></div>
-          <div>Score: <span id="score-display">00000</span></div>
+          <div>Score: <span id="score">0</span></div>
+          <div>High Score: <span id="highscore">0</span></div>
+          <div id="joker-hp-wrapper" class="hud-joker">
+            Joker HP: <span id="joker-hp">-</span>
+          </div>
+
+          <!-- Controls group -->
+          <div class="hud-controls">
+            <!-- Theme toggle switch -->
+            <button
+              id="btn-theme"
+              class="theme-toggle"
+              type="button"
+              title="Toggle Theme"
+            >
+              <span class="theme-toggle-slider">
+                <span class="theme-icon">🌙</span>
+              </span>
+            </button>
+
+            <button
+              id="btn-mute"
+              class="btn-mute"
+              type="button"
+              title="Toggle Sound"
+            >
+              <span class="mute-icon">🔊</span>
+            </button>
+          </div>
         </header>
 
         <div id="game-container">
           <div class="game-bg"></div>
           <div class="game-ground"></div>
-          <div id="game-player" class="game-player">
-            <div class="batmobile">🦇</div>
-          </div>
-          <!-- Container for spawned entities -->
-          <div id="entities-container"></div>
+
+          <!-- Batman -->
+          <div id="player" class="game-player"></div>
+
+          <!-- Joker always on the right, being chased -->
+          <div id="joker" class="joker"></div>
+
+          <!-- Boss phase banner -->
+          <div id="boss-banner" class="boss-banner">Boss Fight</div>
         </div>
 
         <footer class="mobile-controls">
-          <button id="jump-btn" class="btn btn--ghost" type="button">
-            JUMP
-          </button>
-          <button id="shoot-btn" class="btn btn--ghost" type="button">
-            SHOOT
-          </button>
+          <button id="btn-jump" class="btn btn--ghost">Jump</button>
+          <button id="btn-shoot" class="btn btn--ghost">Shoot</button>
         </footer>
       </div>
+
+      <!-- ✅ ADD: Pause Menu Overlay -->
+      <div id="pause-menu" class="pause-menu">
+        <div class="pause-menu__content">
+          <h2 class="pause-menu__title">⏸️ PAUSED</h2>
+          <p class="pause-menu__subtitle">Game is paused</p>
+
+          <div class="pause-menu__buttons">
+            <button id="btn-continue" class="btn btn--primary">
+              ▶️ Continue
+            </button>
+            <button id="btn-restart-pause" class="btn btn--ghost">
+              🔄 Restart
+            </button>
+            <button id="btn-quit" class="btn btn--ghost">🏠 Main Menu</button>
+          </div>
+
+          <p class="pause-menu__hint">
+            Press <kbd>ESC</kbd> or <kbd>P</kbd> to resume
+          </p>
+        </div>
+      </div>
     </section>
 
-    <!-- END SCREEN -->
+    <!-- END VIEW -->
     <section id="end-screen" class="screen">
       <div class="screen__content">
-        <h1 id="end-title" class="title">GAME OVER</h1>
-        <p id="end-message" class="subtitle">You crashed!</p>
-
-        <div class="score-summary">
-          <h2>Final Score</h2>
-          <div class="final-score" id="final-score">00000</div>
-          <div id="high-score-display" class="high-score hidden">
-            🏆 High Score: <span id="high-score">00000</span>
-          </div>
-        </div>
+        <h1 class="title" id="end-title">Game Over</h1>
+        <p id="end-message">You hit an obstacle.</p>
+        <p class="score-summary">
+          Final score: <strong id="final-score">0</strong>
+        </p>
 
         <div class="actions">
-          <button id="restart-btn" class="btn btn--primary" type="button">
-            PLAY AGAIN
+          <button id="btn-restart" class="btn btn--primary" type="button">
+            Play Again
           </button>
-          <button id="menu-btn" class="btn btn--ghost" type="button">
-            BACK TO START
+          <button id="btn-back" class="btn btn--ghost" type="button">
+            Back to Start
           </button>
         </div>
       </div>
     </section>
 
-    <!-- JavaScript Files (order matters!) -->
-    <script src="src/js/utils/constants.js"></script>
-    <script src="src/js/utils/helpers.js"></script>
-    <script src="src/js/components/Player.js"></script>
-    <script src="src/js/components/Obstacle.js"></script>
-    <script src="src/js/components/Enemy.js"></script>
-    <script src="src/js/components/Civilian.js"></script>
-    <script src="src/js/components/Projectile.js"></script>
-    <script src="src/js/managers/EntityManager.js"></script>
-    <script src="src/js/managers/CollisionManager.js"></script>
-    <script src="src/js/managers/ScoreManager.js"></script>
-    <script src="src/js/managers/InputManager.js"></script>
-    <script src="src/js/screens/ScreenManager.js"></script>
-    <script src="src/js/screens/UIManager.js"></script>
-    <script src="src/js/Game.js"></script>
-    <script src="src/js/main.js"></script>
+    <!-- ✅ ADD: Pause Toggle Button (Top UI) -->
+    <div class="pause-toggle-wrapper">
+      <button id="btn-pause" class="pause-toggle" title="Pause (P or ESC)">
+        <span class="pause-icon">⏸️</span>
+      </button>
+    </div>
+
+    <script src="game.js"></script>
   </body>
 </html>
