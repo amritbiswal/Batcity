@@ -197,11 +197,17 @@ p {
 }
 
 #btn-jump,
-#btn-shoot,
-#game-container,
-button {
+#btn-shoot {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: auto;
+}
+
+/* Prevent double-tap zoom on buttons */
+button {
+  touch-action: manipulation;
 }
 
 /* ---------- Theme Toggle Switch ---------- */

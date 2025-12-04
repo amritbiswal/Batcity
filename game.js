@@ -1062,21 +1062,35 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
-// Prevent double-tap zoom on mobile buttons
-[btnJump, btnShoot, btnPause].forEach(btn => {
-  if (btn) {
-    btn.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      if (btn === btnJump && !paused) {
-        handleJump();
-      } else if (btn === btnShoot && !paused) {
-        handleShoot();
-      } else if (btn === btnPause) {
-        togglePause();
-      }
-    }, { passive: false });
-  }
-});
+// ✅ MOBILE BUTTONS - Single event listener per button
+if (btnJump) {
+  btnJump.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // ✅ Prevent event bubbling
+    if (!paused) {
+      handleJump();
+    }
+  }, { passive: false });
+}
+
+if (btnShoot) {
+  btnShoot.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // ✅ Prevent event bubbling
+    if (!paused) {
+      handleShoot();
+    }
+  }, { passive: false });
+}
+
+if (btnPause) {
+  btnPause.addEventListener("click", togglePause);
+  btnPause.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // ✅ Prevent event bubbling
+    togglePause();
+  }, { passive: false });
+}
 
 // Prevent zoom on game container
 if (gameContainer) {
@@ -1085,22 +1099,13 @@ if (gameContainer) {
       e.preventDefault();
     }
   }, { passive: false });
-}
-
-// Mobile - disable controls when paused
-btnJump.addEventListener("touchend", (e) => {
-  e.preventDefault();
-  if (!paused) handleJump();
-}, { passive: false });
-
-btnShoot.addEventListener("touchend", (e) => {
-  e.preventDefault();
-  if (!paused) handleShoot();
-}, { passive: false });
-
-// ✅ ADD: Pause button event listeners
-if (btnPause) {
-  btnPause.addEventListener("click", togglePause);
+  
+  // ✅ Prevent double-tap zoom on container
+  gameContainer.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
 }
 
 if (btnContinue) {
