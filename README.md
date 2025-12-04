@@ -81,8 +81,8 @@ Batman Runner is a 2D side-scrolling endless runner where you control Batman avo
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/amritbiswal/batman-runner.git
-   cd batman-runner
+   git clone https://github.com/amritbiswal/Batcity.git
+   cd Batcity
    ```
 
 2. **Open in browser**
@@ -112,7 +112,7 @@ Batman Runner is a 2D side-scrolling endless runner where you control Batman avo
 ## 📁 **Project Structure**
 
 ```
-batman-runner/
+Batcity/
 ├── index.html          # Main HTML file
 ├── style.css           # All styles (including responsive design)
 ├── game.js             # Game logic and mechanics
@@ -334,7 +334,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🎮 **Play Online**
 
-🔗 **Live Demo**: [https://amritbiswal.github.io/batman-runner](https://amritbiswal.github.io/batman-runner)
+🔗 **Live Demo**: [https://amritbiswal.github.io/Batcity/](https://amritbiswal.github.io/Batcity/)
 
 ---
 
