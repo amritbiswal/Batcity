@@ -432,7 +432,7 @@ button {
 }
 
 @media (max-width: 600px) {
-.game-player {
+  .game-player {
     left: 8% !important; /* Force left position on mobile */
   }
 }
@@ -650,16 +650,17 @@ button {
 /* Mobile Controls */
 .mobile-controls {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   gap: 12px;
   padding: 8px 0;
 }
 
-@media (min-width: 769px) {
-  .mobile-controls {
-    display: none;
-  }
+.mobile-controls button {
+  flex: 1 1 40%;
+  font-size: 1rem;
+  padding: 10px 0;
 }
+
 
 /* End Screen */
 .score-summary {
@@ -676,7 +677,6 @@ button {
   gap: 12px;
   margin-top: 16px;
 }
-
 
 /* =====================================================
    PAUSE TOGGLE BUTTON (Top UI)

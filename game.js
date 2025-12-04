@@ -1085,6 +1085,19 @@ if (btnJump) {
       handleJump();
     }
   }, { passive: false });
+
+  // Click event for desktop/mouse
+  btnJump.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!paused && running) {
+      handleJump();
+    }
+  });
+  
+  // Prevent default touch behaviors
+  btnJump.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+  }, { passive: false });
 }
 
 if (btnShoot) {
@@ -1094,6 +1107,19 @@ if (btnShoot) {
     if (!paused) {
       handleShoot();
     }
+  }, { passive: false });
+
+  // Click event for desktop/mouse
+  btnShoot.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!paused && running) {
+      handleShoot();
+    }
+  });
+  
+  // Prevent default touch behaviors
+  btnShoot.addEventListener('touchstart', (e) => {
+    e.preventDefault();
   }, { passive: false });
 }
 
