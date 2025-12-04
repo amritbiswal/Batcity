@@ -174,7 +174,7 @@ const JUMP_VELOCITY = 600;
 let onGround = true;
 
 // Horizontal movement (boss phase)
-const PLAYER_BASE_X_RATIO = 0.15;  // default X as fraction of width
+const PLAYER_BASE_X_RATIO = 0.10;  // default X as fraction of width
 const PLAYER_SPEED = 220;          // px/s
 let moveLeft = false;
 let moveRight = false;
@@ -445,6 +445,14 @@ function resetGameState() {
   }
 
   updateDifficulty();
+
+  // Use smaller percentage on mobile (narrower screens)
+  let playerXRatio = PLAYER_BASE_X_RATIO;
+  if (GAME_WIDTH < 600) {
+    playerXRatio = 0.08; // Even more left on mobile
+  } else if (GAME_WIDTH < 800) {
+    playerXRatio = 0.10; // Slightly left on tablets
+  }
 
   // Player initial position
   playerX = GAME_WIDTH * PLAYER_BASE_X_RATIO;
@@ -816,14 +824,20 @@ function gameLoop(ts) {
   // Player horizontal movement (boss phase only)
   if (bossActive) {
     if (moveLeft) {
-      playerX -= PLAYER_SPEED * clampedDt; // ✅ CHANGED: Use clamped delta time
+      playerX -= PLAYER_SPEED * clampedDt; 
     }
     if (moveRight) {
-      playerX += PLAYER_SPEED * clampedDt; // ✅ CHANGED: Use clamped delta time
+      playerX += PLAYER_SPEED * clampedDt;
     }
 
-    const minX = GAME_WIDTH * 0.05;
-    const maxX = GAME_WIDTH * 0.6;
+    let minX, maxX;
+    if (GAME_WIDTH < 600) {
+      minX = GAME_WIDTH * 0.03; // Mobile: can go very left
+      maxX = GAME_WIDTH * 0.5;  // Mobile: less right movement
+    } else {
+      minX = GAME_WIDTH * 0.05;
+      maxX = GAME_WIDTH * 0.6;
+    }
     if (playerX < minX) playerX = minX;
     if (playerX > maxX) playerX = maxX;
   }
@@ -833,7 +847,7 @@ function gameLoop(ts) {
 
   // Joker vertical movement in boss phase
   if (bossActive) {
-    jokerY += jokerVy * clampedDt; // ✅ CHANGED: Use clamped delta time
+    jokerY += jokerVy * clampedDt;
 
     if (jokerY < JOKER_MIN_Y) {
       jokerY = JOKER_MIN_Y;

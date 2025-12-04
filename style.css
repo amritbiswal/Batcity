@@ -431,6 +431,18 @@ button {
   transition: background 0.3s ease;
 }
 
+@media (max-width: 600px) {
+.game-player {
+    left: 8% !important; /* Force left position on mobile */
+  }
+}
+
+@media (min-width: 601px) and (max-width: 800px) {
+  .game-player {
+    left: 10% !important; /* Tablet positioning */
+  }
+}
+
 /* Joker at right edge, "running" */
 .joker {
   position: absolute;
