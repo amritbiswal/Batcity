@@ -1062,14 +1062,41 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
-// Mobile - disable controls when paused
-btnJump.addEventListener("click", () => {
-  if (!paused) handleJump(); // ✅ Only if not paused
+// Prevent double-tap zoom on mobile buttons
+[btnJump, btnShoot, btnPause].forEach(btn => {
+  if (btn) {
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      if (btn === btnJump && !paused) {
+        handleJump();
+      } else if (btn === btnShoot && !paused) {
+        handleShoot();
+      } else if (btn === btnPause) {
+        togglePause();
+      }
+    }, { passive: false });
+  }
 });
 
-btnShoot.addEventListener("click", () => {
-  if (!paused) handleShoot(); // ✅ Only if not paused
-});
+// Prevent zoom on game container
+if (gameContainer) {
+  gameContainer.addEventListener('touchmove', (e) => {
+    if (e.scale !== 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+}
+
+// Mobile - disable controls when paused
+btnJump.addEventListener("touchend", (e) => {
+  e.preventDefault();
+  if (!paused) handleJump();
+}, { passive: false });
+
+btnShoot.addEventListener("touchend", (e) => {
+  e.preventDefault();
+  if (!paused) handleShoot();
+}, { passive: false });
 
 // ✅ ADD: Pause button event listeners
 if (btnPause) {

@@ -54,6 +54,8 @@ body {
   align-items: center;
   justify-content: center;
   transition: background 0.3s ease, color 0.3s ease;
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* ---------- Screens (Start / Game / End) ---------- */
@@ -192,6 +194,14 @@ p {
 #btn-start {
   display: block;
   margin: 12px auto 0;
+}
+
+#btn-jump,
+#btn-shoot,
+#game-container,
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ---------- Theme Toggle Switch ---------- */
