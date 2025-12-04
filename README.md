@@ -128,7 +128,7 @@ Batcity/
 
 1. **Phase 1** - Normal enemies and obstacles
 2. **Phase 2** - Increased speed (50+ score)
-3. **Boss Phase** - Joker chase sequence (100+ score)
+3. **Boss Phase** - Joker chase sequence (600+ score)
 
 ### **Entities**
 
@@ -317,7 +317,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👏 **Credits**
 
-- **Developer**: [Your Name](https://github.com/amritbiswal)
+- **Developer**: [Amrit Biswal](https://github.com/amritbiswal)
 - **Inspired by**: Chrome Dino Game
 - **Theme**: Batman & Gotham City
 - **Course**: Ironhack Web Development Bootcamp (Week 3 Project)
