@@ -170,7 +170,7 @@ let playerX = 0;
 let playerY = 0;
 let playerVy = 0;
 const GRAVITY = -1600;
-const JUMP_VELOCITY = 600;
+const JUMP_VELOCITY = 650;
 let onGround = true;
 
 // Horizontal movement (boss phase)
@@ -202,8 +202,8 @@ let bossActive = false;
 const JOKER_MAX_HP = 10;
 let jokerHp = JOKER_MAX_HP;
 
-// Boss appears every 600 score
-const BOSS_SCORE_STEP = 600;
+// Boss appears every 400 score
+const BOSS_SCORE_STEP = 400;
 let lastBossScore = 0;
 let nextBossScore = BOSS_SCORE_STEP;
 let bossCount = 0; // how many bosses defeated => difficulty scaling
@@ -236,6 +236,32 @@ const BULLET_COOLDOWN = 200;
 
 const JOKER_BULLET_SPEED = 220;
 const JOKER_BULLET_INTERVAL = 900;
+
+/**
+ * Calculate speed multiplier based on screen width
+ * Smaller screens = slower game for better playability
+ */
+function calculateSpeedMultiplier() {
+  const width = window.innerWidth;
+  
+  // Speed tiers based on screen width
+  if (width <= 360) {
+    return 0.5; // Very small phones (50% speed)
+  } else if (width <= 480) {
+    return 0.6; // Small phones (60% speed)
+  } else if (width <= 600) {
+    return 0.7; // Medium phones (70% speed)
+  } else if (width <= 768) {
+    return 0.8; // Large phones (80% speed)
+  } else if (width <= 1024) {
+    return 0.9; // Tablets (90% speed)
+  } else {
+    return 1.0; // Small laptops (100% speed)
+  }
+}
+
+// Master speed multiplier - adjust this single value to speed up/slow down entire game
+const GLOBAL_SPEED_MULTIPLIER = calculateSpeedMultiplier(); // Automatically set based on screen width
 
 // --------- HELPERS ---------
 
@@ -326,37 +352,15 @@ function updateDifficulty() {
   // Difficulty scaling with each defeated boss
   const difficultyFactor = 1 + bossCount * 0.25; // +25% per boss
 
-  worldSpeed = baseSpeed * difficultyFactor;
+  worldSpeed = baseSpeed * difficultyFactor * GLOBAL_SPEED_MULTIPLIER;
 
-  obstacleInterval = baseObstacleInterval / difficultyFactor;
-  enemyInterval = baseEnemyInterval / difficultyFactor;
-  civilianInterval = baseCivilianInterval / difficultyFactor;
+  obstacleInterval = baseObstacleInterval / difficultyFactor / GLOBAL_SPEED_MULTIPLIER;
+  enemyInterval = baseEnemyInterval / difficultyFactor / GLOBAL_SPEED_MULTIPLIER;
+  civilianInterval = baseCivilianInterval / difficultyFactor / GLOBAL_SPEED_MULTIPLIER;
 
   bgSpeedSeconds = baseBgSeconds / (0.9 + bossCount * 0.1); // speed up background a bit
 
   applyDifficultyConfig();
-}
-
-function enterBossPhase() {
-  bossActive = true;
-  phase = 4;
-  clearAllObjects();
-
-  jokerHp = JOKER_MAX_HP;
-  if (jokerHpWrapperEl && jokerHpEl) {
-    jokerHpWrapperEl.classList.add("hud-joker--active");
-    jokerHpEl.textContent = jokerHp;
-  }
-
-  // Joker starts at ground and moves vertically
-  jokerY = JOKER_MIN_Y;
-  jokerVy = JOKER_VERTICAL_SPEED;
-  jokerEl.style.bottom = `${jokerY}px`;
-
-  applyDifficultyConfig();
-
-  // PLAY BOSS INTRO SOUND
-  Sound.playBossIntro();
 }
 
 // Boss banner
@@ -386,12 +390,15 @@ function enterBossPhase() {
 
   // Joker starts at ground and moves vertically
   jokerY = JOKER_MIN_Y;
-  jokerVy = JOKER_VERTICAL_SPEED;
+  jokerVy = JOKER_VERTICAL_SPEED * GLOBAL_SPEED_MULTIPLIER;
   jokerEl.style.bottom = `${jokerY}px`;
 
   applyDifficultyConfig();
 
   showBossBanner(`BOSS FIGHT ${bossCount + 1}`);
+  
+  // PLAY BOSS INTRO SOUND
+  Sound.playBossIntro();
 }
 
 function exitBossPhaseAfterVictory() {
@@ -557,7 +564,7 @@ function spawnBullet(ts) {
   if (ts - lastBulletTime < BULLET_COOLDOWN) return;
 
   const el = document.createElement("div");
-  el.className = "bullet";
+  el.className = "bullet player-bullet";
   gameContainer.appendChild(el);
 
   const playerRect = playerEl.getBoundingClientRect();
@@ -583,7 +590,7 @@ function spawnJokerBullet(ts) {
   if (ts - lastJokerBulletTime < JOKER_BULLET_INTERVAL) return;
 
   const el = document.createElement("div");
-  el.className = "bullet";
+  el.className = "bullet joker-bullet";
   gameContainer.appendChild(el);
 
   const jokerRect = jokerEl.getBoundingClientRect();
@@ -596,7 +603,7 @@ function spawnJokerBullet(ts) {
     el,
     x: startX,
     y: bulletY,
-    vx: -JOKER_BULLET_SPEED,
+    vx: -JOKER_BULLET_SPEED * GLOBAL_SPEED_MULTIPLIER,
   };
 
   positionEntity(b);
@@ -787,7 +794,7 @@ function gameLoop(ts) {
 
   // Score & difficulty
   if (!bossActive) {
-    score += dt * 10;
+    score += dt * 10 * GLOBAL_SPEED_MULTIPLIER; // ✅ CHANGED: Scale score gain with global speed
   }
   const displayScore = Math.floor(score);
   scoreEl.textContent = displayScore;
@@ -823,11 +830,14 @@ function gameLoop(ts) {
 
   // Player horizontal movement (boss phase only)
   if (bossActive) {
+
+    const adjustedPlayerSpeed = PLAYER_SPEED * GLOBAL_SPEED_MULTIPLIER;
+    
     if (moveLeft) {
-      playerX -= PLAYER_SPEED * clampedDt; 
+      playerX -= adjustedPlayerSpeed * clampedDt; 
     }
     if (moveRight) {
-      playerX += PLAYER_SPEED * clampedDt;
+      playerX += adjustedPlayerSpeed * clampedDt;
     }
 
     let minX, maxX;
@@ -847,14 +857,16 @@ function gameLoop(ts) {
 
   // Joker vertical movement in boss phase
   if (bossActive) {
+    const adjustedJokerSpeed = JOKER_VERTICAL_SPEED * GLOBAL_SPEED_MULTIPLIER;
+    
     jokerY += jokerVy * clampedDt;
 
     if (jokerY < JOKER_MIN_Y) {
       jokerY = JOKER_MIN_Y;
-      jokerVy = Math.abs(jokerVy);
+      jokerVy = adjustedJokerSpeed;
     } else if (jokerY > JOKER_MAX_Y) {
       jokerY = JOKER_MAX_Y;
-      jokerVy = -Math.abs(jokerVy);
+      jokerVy = -adjustedJokerSpeed;
     }
 
     jokerEl.style.bottom = `${jokerY}px`;

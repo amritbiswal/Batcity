@@ -11,6 +11,7 @@
   --hover-bg: rgba(255, 255, 255, 0.1);
   --gradient-start: #111;
   --gradient-mid: #222;
+  --bg-entity: #ddd;
 }
 
 /* Light theme variables */
@@ -31,6 +32,7 @@ body.light-theme {
   --hover-bg: rgba(44, 62, 80, 0.1); /* Muted hover (was rgba(0,0,0,0.08)) */
   --gradient-start: #b0b5be; /* Match bg-secondary */
   --gradient-mid: #9da3ad; /* Slightly darker mid-tone */
+  --bg-entity: #b0b5be;
 }
 
 /* Basic reset */
@@ -391,82 +393,89 @@ button {
   transition: border-color 0.3s ease;
 }
 
-/* Player (Batman) */
+/* Player (Batman) - Using Image */
 .game-player {
   position: absolute;
   left: 15%;
   bottom: 20%;
-  width: 30px;
-  height: 40px;
+  width: 35px;
+  height: 45px;
+  background: var(--bg-entity);
+  background-image: url("./src/img/batman.png");
+  background-size: cover;
+  /* background-repeat: no-repeat; */
+  background-position: center;
   border: 2px solid var(--text-primary);
-  background: var(--bg-primary);
-  border-radius: 6px;
-  box-shadow: 0 0 4px var(--shadow-color);
-  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 5px;
+  transition: transform 0.3s ease;
+  z-index: 5;
 }
 
-.game-player::before {
-  content: "";
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 8px;
-  background: var(--text-primary);
-  border-radius: 50% 50% 0 0;
-  transition: background 0.3s ease;
-}
-
+/* Remove pseudo-elements (no longer needed) */
+.game-player::before,
 .game-player::after {
-  content: "";
-  position: absolute;
-  bottom: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 12px;
-  background: var(--text-primary);
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  transition: background 0.3s ease;
+  display: none;
 }
 
-@media (max-width: 600px) {
+/* Optional: Add slight animation on jump */
+.game-player.jumping {
+  animation: player-jump-rotate 0.5s ease;
+}
+
+@keyframes player-jump-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-10deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 768px) {
   .game-player {
-    left: 8% !important; /* Force left position on mobile */
+    left: 8%;
+    width: 35px; /* ✅ Smaller on mobile */
+    height: 35px;
   }
 }
 
 @media (min-width: 601px) and (max-width: 800px) {
   .game-player {
-    left: 10% !important; /* Tablet positioning */
+    left: 10% !important;
+    width: 40px;
+    height: 40px;
   }
 }
 
-/* Joker at right edge, "running" */
+/* =====================================================
+   JOKER BOSS - USING IMAGE
+   ===================================================== */
+
 .joker {
   position: absolute;
   bottom: 20%;
   right: 10%;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 50px;
+  background-image: url("./src/img/joker_run.png"); /* ✅ ADD YOUR JOKER IMAGE */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Fallback styling */
+  background-color: var(--bg-secondary);
   border: 2px solid var(--text-primary);
-  background: var(--bg-secondary);
   border-radius: 4px;
   animation: joker-run 0.4s ease-in-out infinite alternate;
   transition: border-color 0.3s ease, background 0.3s ease;
 }
 
+/* Remove Joker's "J" text */
 .joker::before {
-  content: "J";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: var(--text-primary);
-  transition: color 0.3s ease;
+  display: none;
 }
 
 @keyframes joker-run {
@@ -499,83 +508,131 @@ button {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* Entities as simple sprites */
+/* Entities base styles */
 .obstacle,
 .enemy,
-.civilian,
+.civilian {
+  position: absolute;
+  pointer-events: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* --------- OBSTACLE --------- */
+.obstacle {
+  width: 24px;
+  height: 40px;
+  bottom: 20%;
+  background-image: url("./src/img/obstacle.png");
+  background-size: cover;
+  /* Fallback if image doesn't load */
+  background-color: var(--bg-entity);
+  /* border: 2px solid var(--text-primary); */
+}
+
+/* Remove text content */
+.obstacle::before {
+  display: none;
+}
+
+/* --------- ENEMY --------- */
+.enemy {
+  width: 30px;
+  height: 40px;
+  bottom: 20%;
+  background-image: url("./src/img/enemy.png");
+  background-size: contain;
+  /* Fallback if image doesn't load */
+  background-color: var(--bg-entity);
+  /* border: 2px solid var(--text-primary); */
+}
+
+.enemy::before {
+  display: none;
+}
+
+/* --------- CIVILIAN --------- */
+.civilian {
+  width: 24px;
+  height: 40px;
+  bottom: 20%;
+  background-image: url("./src/img/civilian.png");
+  background-size: contain;
+  /* Fallback styling */
+  border: 2px solid var(--bg-entity);
+  background-color: transparent;
+  /* border: 2px solid var(--text-primary); */
+  border-radius: 2px;
+  transition: border-color 0.3s ease;
+}
+
+.civilian::before {
+  display: none;
+}
+
+/* =====================================================
+   BULLETS - SEPARATE BATMAN & JOKER
+   ===================================================== */
+
+/* Base bullet styles */
 .bullet {
   position: absolute;
   pointer-events: none;
 }
 
-/* Obstacle (solid box) */
-.obstacle {
+/* --------- BATMAN'S BULLET (Image) --------- */
+.bullet.player-bullet {
   width: 24px;
-  height: 40px;
-  bottom: 20%;
+  height: 12px;
+  background: var(--bg-entity);
+  background-image: url("./src/img/bullet.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 0 4px #fff);
+  animation: batman-bullet-spin 0.5s linear infinite;
+}
+
+/* Optional: Spinning animation for Batman's bullet */
+@keyframes batman-bullet-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fallback if image doesn't load */
+/* .bullet.player-bullet:not([style*="background-image"]) {
   background: var(--text-primary);
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 14px;
-  color: var(--bg-primary);
-}
+  clip-path: polygon(
+    50% 0%,
+    80% 20%,
+    100% 50%,
+    80% 80%,
+    50% 100%,
+    20% 80%,
+    0% 50%,
+    20% 20%
+  );
+} */
 
-.obstacle::before {
-  content: "O";
-  transition: color 0.3s ease;
-}
-
-/* Enemy (solid box) */
-.enemy {
-  width: 24px;
-  height: 40px;
-  bottom: 20%;
-  background: var(--text-primary);
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 14px;
-  color: var(--bg-primary);
-}
-
-.enemy::before {
-  content: "E";
-  transition: color 0.3s ease;
-}
-
-/* Civilian (outline box) */
-.civilian {
-  width: 18px;
-  height: 34px;
-  bottom: 20%;
-  border: 2px solid var(--text-primary);
-  background: transparent;
-  border-radius: 2px;
-  transition: border-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 12px;
-  color: var(--text-primary);
-}
-
-.civilian::before {
-  content: "C";
-  transition: color 0.3s ease;
-}
-
-/* Bullet (both Batman & Joker) */
-.bullet {
+/* --------- JOKER'S BULLET (Original Style) --------- */
+.bullet.joker-bullet {
   width: 16px;
   height: 4px;
-  background: var(--text-primary);
+  background: #8b00ff; /* Purple for Joker */
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(139, 0, 255, 0.8);
   transition: background 0.3s ease;
+}
+
+/* Light theme adjustments for Joker bullet */
+body.light-theme .bullet.joker-bullet {
+  background: #6a0dad;
+  box-shadow: 0 0 6px rgba(106, 13, 173, 0.6);
 }
 
 /* Mobile: smaller entities */
@@ -585,38 +642,43 @@ button {
   }
 
   .game-player {
-    left: 8%;
-    width: 20px;
-    height: 28px;
+    left: 3%;
+    width: 24px;
+    height: 30px;
     border-width: 1px;
   }
 
   .joker {
     right: 8%;
-    width: 26px;
-    height: 26px;
+    width: 36px;
+    height: 36px;
     border-width: 1px;
   }
 
   .obstacle {
-    width: 16px;
+    width: 18px;
     height: 28px;
   }
 
   .enemy {
-    width: 16px;
+    width: 18px;
     height: 28px;
     border-width: 1px;
   }
 
   .civilian {
-    width: 12px;
-    height: 24px;
+    width: 18px;
+    height: 28px;
   }
 
   .bullet {
     width: 12px;
     height: 3px;
+  }
+
+  .bullet.player-bullet {
+    width: 16px;
+    height: 4px;
   }
 
   .btn-mute {
@@ -660,7 +722,6 @@ button {
   font-size: 1rem;
   padding: 10px 0;
 }
-
 
 /* End Screen */
 .score-summary {
