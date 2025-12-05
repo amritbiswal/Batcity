@@ -405,7 +405,7 @@ button {
   background-size: cover;
   /* background-repeat: no-repeat; */
   background-position: center;
-  border: 2px solid var(--text-primary);
+  border: 0.5px solid var(--text-primary);
   border-radius: 5px;
   transition: transform 0.3s ease;
   z-index: 5;
@@ -435,18 +435,17 @@ button {
 }
 
 /* Mobile responsive sizing */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .game-player {
-    left: 8%;
-    width: 35px; /* ✅ Smaller on mobile */
+    left: 7% !important;
+    width: 28px; /* ✅ Smaller on mobile */
     height: 35px;
   }
 }
 
 @media (min-width: 601px) and (max-width: 800px) {
   .game-player {
-    left: 10% !important;
-    width: 40px;
+    width: 35px;
     height: 40px;
   }
 }
@@ -639,13 +638,6 @@ body.light-theme .bullet.joker-bullet {
 @media (max-width: 768px) {
   #game-container {
     height: min(40vh, 250px);
-  }
-
-  .game-player {
-    left: 3%;
-    width: 24px;
-    height: 30px;
-    border-width: 1px;
   }
 
   .joker {
